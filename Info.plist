@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>Nomen</string>
+    <key>CFBundleIdentifier</key>
+    <string>cc.jorviksoftware.Nomen</string>
+    <key>CFBundleName</key>
+    <string>Nomen</string>
+    <key>CFBundleDisplayName</key>
+    <string>Nomen</string>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleVersion</key>
+    <string>0.1.0</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.1.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <key>NSDesktopFolderUsageDescription</key>
+    <string>Nomen renames new screenshots in the folder macOS saves them to. Your screenshots are saved to the Desktop, so Nomen needs to see it.</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>Nomen renames new screenshots in the folder macOS saves them to. Your screenshots are saved in Documents, so Nomen needs to see it.</string>
+    <key>NSDownloadsFolderUsageDescription</key>
+    <string>Nomen renames new screenshots in the folder macOS saves them to. Your screenshots are saved in Downloads, so Nomen needs to see it.</string>
+    <key>SUFeedURL</key>
+    <string>https://jorviksoftware.cc/appcasts/nomen.xml</string>
+    <key>SUPublicEDKey</key>
+    <string>zVc7rs8EiLmlDAYpgaIItjnHtsCkvyVVub+I0/sSb3Q=</string>
+    <key>SUEnableAutomaticChecks</key>
+    <true/>
+    <key>SUScheduledCheckInterval</key>
+    <integer>86400</integer>
+</dict>
+</plist>
