@@ -134,6 +134,37 @@ final class RuleNamerTests: XCTestCase {
     }
 }
 
+final class BrowserNameTests: XCTestCase {
+
+    func testRealLeaksFromTheTestRuns() {
+        // Names the on-device model produced on 2026-10-02 for screenshots taken in Safari.
+        XCTAssertEqual(BrowserName.strip("jonathan-hollin-safari", appName: "Safari"), "jonathan-hollin")
+        XCTAssertEqual(BrowserName.strip("safari-agreements-list", appName: "Safari"), "agreements-list")
+        XCTAssertEqual(BrowserName.strip("safari-profile-menu-options", appName: "Safari"), "profile-menu-options")
+    }
+
+    func testTwoWordBrowserGoesAsAPairOrAlone() {
+        XCTAssertEqual(BrowserName.strip("google-chrome-pull-request-48", appName: "Google Chrome"), "pull-request-48")
+        XCTAssertEqual(BrowserName.strip("chrome-pull-request-48", appName: "Google Chrome"), "pull-request-48")
+    }
+
+    func testOtherAppsKeepTheirName() {
+        // In Outlook the app is often part of what the screenshot is about.
+        XCTAssertEqual(BrowserName.strip("outlook-error-dates", appName: "Microsoft Outlook"), "outlook-error-dates")
+        XCTAssertEqual(BrowserName.strip("safari-history", appName: nil), "safari-history")
+    }
+
+    func testABrowserWordIsOnlyRemovedForThatBrowser() {
+        // A Firefox screenshot that mentions Safari keeps the word.
+        XCTAssertEqual(BrowserName.strip("safari-park-tickets", appName: "Firefox"), "safari-park-tickets")
+    }
+
+    func testTooShortAfterwardsKeepsTheName() {
+        XCTAssertEqual(BrowserName.strip("safari-settings", appName: "Safari"), "safari-settings")
+        XCTAssertEqual(BrowserName.strip("safari", appName: "Safari"), "safari")
+    }
+}
+
 final class RenameHistoryTests: XCTestCase {
 
     func testNewestFirstCappedAndPersisted() throws {

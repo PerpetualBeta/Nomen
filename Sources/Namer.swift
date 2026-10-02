@@ -111,17 +111,26 @@ enum Namer {
             nmLog("namer: model unavailable (\(reason)); using rules")
         case .imageAndText:
             if let stem = await modelName(url: url, text: text, context: context, useImage: true) {
-                return Result(stem: stem, method: "model")
+                return finished(stem, method: "model", context: context)
             }
         case .textOnly:
             if let stem = await modelName(url: url, text: text, context: context, useImage: false) {
-                return Result(stem: stem, method: "model (text)")
+                return finished(stem, method: "model (text)", context: context)
             }
         }
         if let stem = RuleNamer.name(appName: context.appName, recognisedText: text) {
-            return Result(stem: stem, method: "rules")
+            return finished(stem, method: "rules", context: context)
         }
         return nil
+    }
+
+    /// The name with any web browser's name taken out: the screenshot is of the page, not the
+    /// browser. See `BrowserName`. Applied to every path, the rules included, which put the app
+    /// name first by design.
+    private static func finished(_ stem: String, method: String, context: CaptureContext.Context) -> Result {
+        let cleaned = BrowserName.strip(stem, appName: context.appName)
+        if cleaned != stem { nmLog("namer: removed the browser's name: \(stem) -> \(cleaned)") }
+        return Result(stem: cleaned, method: method)
     }
 
     /// Recognises text on a background thread. Vision's first request in a process loads
