@@ -6,10 +6,6 @@ import Sparkle
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
-    /// How many recent renames the menu lists. The rest stay in the history for the
-    /// record but would only make the menu long.
-    static let recentInMenu = 5
-
     private var statusItem: NSStatusItem?
     let engine = NomenEngine()
 
@@ -89,7 +85,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     // MARK: - Menu (NSMenuDelegate)
 
     func menuNeedsUpdate(_ menu: NSMenu) {
-        let recent = Array(engine.history.records.prefix(Self.recentInMenu))
+        let recent = engine.history.records
         var actions: [JorvikMenuBuilder.ActionItem] = []
 
         let heading = recent.isEmpty

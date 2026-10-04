@@ -32,7 +32,7 @@ Take a screenshot the way you always do, for example with `shift` `command` `4`.
 
 - **Only new screenshots are renamed.** Nomen does not touch screenshots that were in the folder before it started.
 - **Nomen follows macOS.** It watches the folder that macOS saves screenshots to. To change that folder, press `shift` `command` `5`, then choose Options.
-- **Every rename can be undone.** The menu shows the last five renames. You can show each one in Finder or put back its original name.
+- **Every rename can be undone.** The menu shows the last 20 renames. You can show each one in Finder or put back its original name.
 - **Two screenshots of the same thing** get `-2`, `-3` and so on. One never replaces the other.
 
 ## Menu Bar Icon
@@ -41,7 +41,7 @@ Nomen shows a tag in the menu bar. A tag with a line through it means that namin
 
 The menu has these items:
 
-- **Recently Renamed**: the last five renames. Each one has **Show in Finder** and **Undo**.
+- **Recently Renamed**: the last 20 renames. Each one has **Show in Finder** and **Undo**.
 - **Pause Naming**: stops renaming until you choose it again. Screenshots that you take while Nomen is paused keep their macOS names.
 - **Open Screenshot Folder**.
 - **Check for Updates…**, **Settings…** and **Quit Nomen**.
