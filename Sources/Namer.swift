@@ -196,7 +196,7 @@ enum Namer {
                 // message used as a "description" got a file named after the path inside it.
                 // `respond` throws on failure; an empty reply is treated the same way.
                 guard !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-                    throw CancellationError()
+                    throw EmptyDescription()
                 }
                 let namer = LanguageModelSession(model: .default, instructions: naming)
                 let name = try await namer.respond(to: "Description: \(description)", options: options).content
@@ -226,16 +226,34 @@ enum Namer {
         return await withCheckedContinuation { continuation in
             gate.set(continuation)
             let task = Task {
-                let value = try? await work()
-                gate.resume(value)
+                // The error is logged, not just dropped. `try?` used to turn every failure into
+                // "the model gave no reply", so two names on 2026-10-05 fell back to the rules
+                // after 1.7 s and 1.9 s, well inside the timeout, and the log could not say why.
+                do {
+                    gate.resume(try await work())
+                } catch {
+                    // Only if this branch ended the wait: once the timeout has won, the work is
+                    // cancelled and its CancellationError is the timeout's echo, not a cause.
+                    if gate.resume(nil) {
+                        nmLog("namer: model call failed — \(String(describing: error))")
+                    }
+                }
             }
             Task {
                 try? await Task.sleep(nanoseconds: UInt64(seconds * 1_000_000_000))
                 task.cancel()
-                gate.resume(nil)
+                if gate.resume(nil) {
+                    nmLog(String(format: "namer: model call timed out after %.0fs", seconds))
+                }
             }
         }
     }
+}
+
+/// The describe step answered with nothing. Thrown so that it is logged as itself, where it used
+/// to be a CancellationError and read like the timeout.
+private struct EmptyDescription: Error, CustomStringConvertible {
+    var description: String { "the model described the screenshot with an empty reply" }
 }
 
 /// Resumes a continuation exactly once, whichever caller gets there first.
@@ -247,11 +265,14 @@ private final class ResumeOnce<T>: @unchecked Sendable {
         lock.lock(); continuation = c; lock.unlock()
     }
 
-    func resume(_ value: T) {
+    /// Whether this call was the one that resumed it.
+    @discardableResult
+    func resume(_ value: T) -> Bool {
         lock.lock()
         let c = continuation
         continuation = nil
         lock.unlock()
         c?.resume(returning: value)
+        return c != nil
     }
 }
