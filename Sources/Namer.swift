@@ -208,8 +208,11 @@ enum Namer {
                 return nil
             }
             let stem = Slug.make(from: reply.name)
-            nmLog(String(format: "namer: model replied in %.1fs: %@ | %@ -> %@",
-                         elapsed, reply.description, reply.name, stem ?? "(unusable)"))
+            // Lengths, never the text. The description is what the screenshot shows, and on
+            // 2026-10-08 a 1Password card's description put a database password into this log.
+            // The final name is logged because the renamed file already carries it on disk.
+            nmLog(String(format: "namer: model replied in %.1fs: %d-character description, %d-character name -> %@",
+                         elapsed, reply.description.count, reply.name.count, stem ?? "(unusable)"))
             return stem
         }
         #endif
@@ -235,7 +238,10 @@ enum Namer {
                     // Only if this branch ended the wait: once the timeout has won, the work is
                     // cancelled and its CancellationError is the timeout's echo, not a cause.
                     if gate.resume(nil) {
-                        nmLog("namer: model call failed — \(String(describing: error))")
+                        // The error's type and its plain message say why ("The model's safety
+                        // guardrails were triggered"). Not `String(describing:)`, whose debug
+                        // context could carry the prompt, and the prompt holds the description.
+                        nmLog("namer: model call failed: \(type(of: error)): \(error.localizedDescription)")
                     }
                 }
             }

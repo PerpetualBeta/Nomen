@@ -122,7 +122,7 @@ defaults delete cc.jorviksoftware.Nomen describeInstructions
 - **A screenshot was not renamed.** Make sure that naming is not paused, and that Nomen was running when you took the screenshot. Nomen renames only screenshots that macOS saves. Images that other apps save are not screenshots to Nomen.
 - **The first screenshot after login is slow.** Vision loads its models the first time that it is used. This can take about 30 seconds. After that, Nomen names a screenshot in a few seconds.
 - **A name is wrong.** Undo it from the menu. A small model sometimes chooses the wrong words.
-- **Debug log.** To write a log to `~/Library/Logs/Nomen/nomen.log`, use `defaults write cc.jorviksoftware.Nomen debugLogging -bool YES`. The log contains file names, descriptions and names, so it is off by default. At 4 MB, Nomen moves the log to `nomen.log.1` and starts a new one. Thus the two files never use more than 8 MB. To change the limit, use `defaults write cc.jorviksoftware.Nomen debugLogMaxBytes -int <bytes>`.
+- **Debug log.** To write a log to `~/Library/Logs/Nomen/nomen.log`, use `defaults write cc.jorviksoftware.Nomen debugLogging -bool YES`. The log contains file names, timings and the names that Nomen gives. It does not contain what a screenshot shows: descriptions and recognised text are recorded only as their length. The log is off by default. To turn it off again, use `defaults delete cc.jorviksoftware.Nomen debugLogging`. At 4 MB, Nomen moves the log to `nomen.log.1` and starts a new one. Thus the two files never use more than 8 MB. To change the limit, use `defaults write cc.jorviksoftware.Nomen debugLogMaxBytes -int <bytes>`.
 
 ## Acknowledgements
 

@@ -9,8 +9,13 @@ import Foundation
 //
 // Never write to Console/stderr or /tmp. This mirrors the Jorvik logging convention: a
 // symlink-safe append to a 0700 directory, gated behind a UserDefaults flag read on every
-// call. Names, descriptions and recognised text are screenshot contents, so the log stays
-// on this Mac, is private to this user, and is never written unless the user turns it on.
+// call. The log stays on this Mac, is private to this user, and is never written unless the
+// user turns it on.
+//
+// It never records what a screenshot shows. Descriptions and recognised text are logged as
+// lengths only; the one piece of content it keeps is the file's new name, which the file
+// already carries on disk. Until 1.0.2 the model's description was logged in full, and on
+// 2026-10-08 that put a database password from a 1Password card into this file.
 private let nmLogDirectory: URL = FileManager.default
     .urls(for: .libraryDirectory, in: .userDomainMask)[0]
     .appendingPathComponent("Logs", isDirectory: true)
